@@ -1,0 +1,72 @@
+.minutes-slider-container {
+  position: relative;
+  width: 203px;
+  height: 203px;
+  user-select: none;
+  touch-action: none;
+  /* margin: 20px auto; */
+  cursor: pointer;
+}
+
+.minutes-slider-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(90deg); /* 6時方向を起点 */
+}
+
+.minutes-slider-svg circle {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.minutes-slider-bg {
+  stroke: #575757;
+  opacity: 70%;
+}
+
+.minutes-slider-progress {
+  stroke: #2F2F2F;
+  transition: stroke-dashoffset 0s linear;
+}
+
+.minutes-slider-thumb {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: #FFD53D;
+  /* border: 3px solid #1a73e8; */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.minutes-value-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(to right,
+      #F7A275,
+      #F7A275 36%,
+      #914745 88%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.minutes-value-display .unit {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  margin-top: 20px;
+}
