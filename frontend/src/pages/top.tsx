@@ -2,6 +2,7 @@ import './Top.css';
 import planet1 from '../assets/planet_1.png';
 import planet2 from '../assets/planet_2.png';
 import additionBtn from '../assets/addition_btn.png';
+import MinutesSlider from '../components/MinutesSlider';
 // import topBackground from '../assets/top_background.png';
 // import topBlack from '../assets/top_black.png';
 
@@ -28,7 +29,7 @@ function Top() {
                         </div>
                     </div>
                     <div className="timer_content">
-
+                        <MinutesSlider/>
                     </div>
                     <div className="start_btn">
                         <button>スタート</button>
