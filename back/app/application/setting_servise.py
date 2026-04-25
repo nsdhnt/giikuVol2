@@ -22,3 +22,10 @@ class UpdateSettingsUseCase:
             settings.time= time
 
         return self.repo.save(settings)
+
+class GetSettingsUseCase:
+    def __init__(self, repo: SettingsRepository):
+        self.repo = repo
+
+    def execute(self, user_id: str) -> Settings | None:
+        return self.repo.find_by_user_id(user_id)
