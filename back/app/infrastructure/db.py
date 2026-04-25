@@ -9,10 +9,13 @@ if not DATABASE_URL:
 
 connection_pool = pool.SimpleConnectionPool(1, 10, DATABASE_URL)
 
-@contextmanager
 def get_db():
     conn = connection_pool.getconn()
     try:
         yield conn
+        conn.commit()
+    except:
+        conn.rollback()
+        raise
     finally:
         connection_pool.putconn(conn)
