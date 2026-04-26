@@ -111,7 +111,7 @@ const MinutesSlider: React.FC<MinutesSliderProps> = ({
       />
       
       <div className="minutes-value-display">
-        {value}<span className="unit">m</span>
+        {value}<span className="unit">min</span>
       </div>
     </div>
   );

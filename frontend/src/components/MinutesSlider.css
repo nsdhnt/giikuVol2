@@ -70,3 +70,9 @@
   color: white;
   margin-top: 20px;
 }
+
+.countdown_container{
+  color: white;
+  font-size: 5rem;
+  font-family: sans-serif, "A P-OTF A1Gothic Std";
+}

@@ -25,6 +25,16 @@ html {
   background-repeat: no-repeat;
 }
 
+.top_page.launchLocket{
+  background-image:
+    url("../assets/top_background.png");
+}
+
+.top_page.changeBGImg{
+  background-image: 
+    url("../assets/chat_background.png");
+}
+
 .container {
   width: 344px;
   height: 530px;
@@ -163,5 +173,42 @@ html {
     /* background-image: url("../assets/startBtnLuster.png"); */
     /* background-repeat: no-repeat; */
     /* background-position: 10px 4px; */
+  }
+}
+
+.rocket{
+  position: absolute;
+  right: 54px;
+  bottom: 80px;
+  animation: launchLocket 5s forwards;
+  /* transition: bottom 5s; */
+}
+
+.smoke{
+  position: absolute;
+  right: 0;
+  bottom: -30px;
+  animation: vanishSmoke 5s forwards;
+}
+
+/* .rocket.active{
+  bottom: 300px;
+} */
+
+@keyframes launchLocket {
+  0%{
+    bottom: 80px;
+  }
+  100%{
+    bottom: 416px;
+  }
+}
+
+@keyframes vanishSmoke {
+  0%{
+    opacity: 100%;
+  }
+  100%{
+    opacity: 20%;
   }
 }
