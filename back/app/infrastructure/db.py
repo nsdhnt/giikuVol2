@@ -1,18 +1,17 @@
-from contextlib import contextmanager
-from psycopg2 import pool
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DATABASE_URL:
-    raise ValueError("DATABASE_URL is not set")
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(bind=engine)
 
-connection_pool = pool.SimpleConnectionPool(1, 10, DATABASE_URL)
+Base = declarative_base()
 
-@contextmanager
 def get_db():
-    conn = connection_pool.getconn()
+    db = SessionLocal()
     try:
-        yield conn
+        yield db
     finally:
-        connection_pool.putconn(conn)
+        db.close()
