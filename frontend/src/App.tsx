@@ -5,6 +5,7 @@
 // import MyReplyContainer from "./components/MyReplyContainer";
 // import ChatArea from "./components/ChatArea";
 import Login from "./pages/Login";
+// import Description from "./pages/Description";
 
 function App() {
   return(
@@ -17,6 +18,7 @@ function App() {
       {/* <MyReplyContainer /> */}
       {/* <ChatArea /> */}
       <Login />
+      {/* <Description /> */}
     </>
   )
 }
