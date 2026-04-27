@@ -1,6 +1,7 @@
 # presentation/settings_router.py
 from fastapi import APIRouter, Depends
 from app.application.setting_servise import UpdateSettingsUseCase
+from app.application.setting_servise import GetSettingsUseCase
 from app.infrastructure.setting_repository_impl import SettingsRepositoryImpl
 from app.infrastructure.db import get_db
 from pydantic import BaseModel
@@ -29,4 +30,18 @@ def update_settings(req: SettingsRequest, db=Depends(get_db)):
         "time": result.time,
         "created_at": result.created_at.isoformat()
     }
-    
+
+@router.get("/settings/{user_id}")
+def get_settings(user_id: str, db=Depends(get_db)):
+    repo = SettingsRepositoryImpl(db)
+    usecase = GetSettingsUseCase(repo)
+
+    result = usecase.execute(user_id)
+
+    if not result:
+        return {"message": "not found"}
+
+    return {
+        "topic": result.topic,
+        "time": result.time,
+    }

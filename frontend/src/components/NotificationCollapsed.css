@@ -1,0 +1,67 @@
+html{
+  font-size: 62.5%;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  /* background-color: black; */
+}
+
+.NCcontainer{
+  width: 362px;
+  height: 64px;
+  border-radius: 24px;
+  /* background-color: #fff; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* border: solid 1px tomato; */
+  /* padding: 13px 14px; */
+  .NCcontent{
+    width: 334px;
+    height: 38px;
+    display: flex;
+    background-color: #fff;
+    /* border: solid 1px slateblue; */
+    background-color: transparent;
+    .NCicon{
+      background-color: transparent;
+      img{
+        background-color: rgba(0,0,0,0);
+        width: 38px;
+        height: 38px;
+      }
+    }
+    .NCname{
+      background-color: transparent;
+      padding: 0;
+      padding-left: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 218px;
+      color: white;
+      /* border: solid 1px black; */
+      p{
+        background-color: transparent;
+        font-size: 1.5rem;
+        line-height: 15px;
+        padding: 0;
+        /* border: solid 1px tomato; */
+      }
+    }
+    .NCtime{
+      background-color: transparent;
+      font-size: 1.5rem;
+      line-height: 15px;
+      align-self: flex-start;
+      margin-left: 2px;
+      color: #4D4D4D;
+    }
+  }
+}
