@@ -1,0 +1,125 @@
+html{
+  font-size: 62.5%;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  /* background-color: black; */
+}
+
+body{
+  background-color: black;
+}
+
+.description_page{
+  overflow-x: hidden;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: 
+    url("../assets/top_black.png"),
+    url("../assets/top_background.png");
+  background-size: cover;
+  background-position: 0 -20px;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h1{
+    position: absolute;
+    top: 30px;
+    /* border: solid 1px tomato; */
+  }
+  .slideWholeWrap{
+    position: absolute;
+    top: auto;
+    bottom: auto;
+    left: 0;
+    width: 302%;
+    height: 430px;
+    display: flex;
+    /* transform: translateX(-393px); */
+    transition-property: transform;
+    transition-duration: 1s;
+    /* border: solid 1px tomato; */
+    .slideWrap{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      p{
+        color: white;
+        font-size: 2.4rem;
+        margin-top: 0;
+        margin-bottom: 20px;
+        line-height: 2rem;
+        &:last-child{
+          position: absolute;
+          top: 420px;
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+  .slideWholeWrap.slide2{
+    /* transform: translateX(-393px); */
+    animation: slide2 0.5s forwards;
+  }
+  .slideWholeWrap.slide3{
+    /* transform: translateX(-786px); */
+    animation: slide3 0.5s forwards;
+  }
+  .slideCircle{
+    position: absolute;
+    top: 670px;
+    /* left: 0;
+    border: solid 1px white;
+    bottom: 0; */
+    z-index: 10;
+    img{
+      width: 54px;
+      object-fit: cover;
+      /* border: solid 100px white; */
+    }
+  }
+  .nextButton{
+    position: absolute;
+    top: 700px;
+    button{
+      width: 310px;
+      height: 43px;
+      background-color: #EC6055;
+      color: white;
+      font-size: 2.4rem;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+    }
+  }
+}
+
+@keyframes slide2 {
+  0%{
+    transform: translateX(0);
+  }
+  100%{
+    transform: translateX(-393px);
+  }
+}
+
+@keyframes slide3 {
+  0%{
+    transform: translateX(-393px);
+  }
+  100%{
+    transform: translateX(-786px);
+  }
+}
