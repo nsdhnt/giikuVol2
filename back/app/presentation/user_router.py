@@ -1,9 +1,14 @@
-# app/presentation/user_router.py
-from fastapi import APIRouter
-from app.application.user_service import get_user
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.infrastructure.db import get_db
+from app.application.user_service import signup, login
 
 router = APIRouter()
 
-@router.get("/users/{user_id}")
-def read_user(user_id: int):
-    return get_user(user_id)
+@router.post("/signup")
+def signup_api(email: str, password: str, db: Session = Depends(get_db)):
+    return signup(db, email, password)
+
+@router.post("/login")
+def login_api(email: str, password: str, db: Session = Depends(get_db)):
+    return login(db, email, password)
