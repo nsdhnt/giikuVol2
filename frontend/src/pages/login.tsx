@@ -63,6 +63,7 @@ function Login() {
                 name='mailAddress'
                 value={formValues.mailAddress}
                 onChange={handleChange}
+                style={{ border: "solid 1px red" }}
               />
             </div>
             {/* 波括弧を1つに修正 */}
@@ -76,6 +77,7 @@ function Login() {
                 name='password'
                 value={formValues.password}
                 onChange={handleChange}
+                style={{ border: "solid 1px red" }}
               />
             </div>
             <p className="errorMsg" style={{ color: "red" }}>{formErrors.password}</p>
