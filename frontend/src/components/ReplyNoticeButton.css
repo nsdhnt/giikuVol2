@@ -1,0 +1,62 @@
+html{
+  font-size: 62.5%;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+}
+
+.RNcontainer{
+  width: 234px;
+  height: 93px;
+  background-color: #424242;
+  border-radius: 20px;
+  .replyContainer{
+    width: 100%;
+    height: 46px;
+    background-color: #424242;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px 20px 0 0;
+    .replyWrap{
+      width: 205px;
+      height: 20px;
+      display: flex;
+      justify-content: space-between;
+      p{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+      }
+    }
+  }
+  hr{
+    border: solid 1px rgba(255, 255, 255, 0.38);
+  }
+  .noticeContainer{
+    width: 100%;
+    height: 46px;
+    background-color: #424242;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 0 20px 20px;
+    .noticeWrap{
+      width: 205px;
+      height: 20px;
+      display: flex;
+      justify-content: space-between;
+      p{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ import MinutesSlider from '../components/MinutesSlider';
 import rocket from '../assets/rocket.png';
 import smoke from '../assets/smoke.png';
 import { useState } from 'react';
+import ChatArea from '../components/ChatArea';
 // import topBackground from '../assets/top_background.png';
 // import topBlack from '../assets/top_black.png';
 
@@ -23,7 +24,10 @@ function Top() {
           setMode("launchLocket");
           setTimeout(() => {
             setMode("changeBGImg");
-          }, 5000);
+          }, 3000);
+          setTimeout(() => {
+            setMode("chatArea");
+          }, 3500);
           return 0;
         }
         return prev - 1;
@@ -78,6 +82,9 @@ function Top() {
       { mode === "changeBGImg" && (
         <div className="top_page changeBGImg">
         </div>
+      )}
+      { mode === "chatArea" && (
+        <ChatArea />
       )}
     </>
   )
