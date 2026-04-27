@@ -180,7 +180,7 @@ html {
   position: absolute;
   right: 54px;
   bottom: 80px;
-  animation: launchLocket 5s forwards;
+  animation: launchLocket 3s forwards;
   /* transition: bottom 5s; */
 }
 
@@ -188,7 +188,7 @@ html {
   position: absolute;
   right: 0;
   bottom: -30px;
-  animation: vanishSmoke 5s forwards;
+  animation: vanishSmoke 3s forwards;
 }
 
 /* .rocket.active{

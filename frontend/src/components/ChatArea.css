@@ -1,0 +1,121 @@
+html{
+  font-size: 62.5%;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  /* background-color: black; */
+}
+
+body{
+  background-image: url("../assets/chat_background.png");
+  overflow-x: hidden;
+}
+
+.NC{
+  margin-top: 11px;
+  height: 200px;
+  border: solid 1px tomato;
+}
+
+.RNB{
+  margin-top: 11px;
+  height: 200px;
+  border: solid 1px tomato;
+}
+
+.chatContainer {
+  width: 393px;
+  height: 600px;
+  border-radius: 7px 7px 0 0;
+  position: absolute;
+  bottom: -256px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: bottomSlide 1s forwards;
+
+
+  /* ポイント：黒を混ぜず、白の濃度（0.4〜0.1）だけで立体感を出す */
+  background: radial-gradient(
+    circle at 50% 0%, 
+    rgba(255, 255, 255, 0.4) 0%,   /* 上部は白を濃くして光を表現 */
+    rgba(255, 255, 255, 0.1) 100%  /* 下に行くほど薄くして後ろを透かす */
+  );
+
+  /* ぼかしを強くすると白さが強調されます */
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+
+  /* 縁にハイライトを入れると一気に白っぽく見えます */
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-bottom: none;
+
+  /* 内側に少しだけ白の影を入れると厚みが出ます */
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+  button{
+    background-color: transparent;
+    border: none;
+    width: 25px;
+    height: 16px;
+    object-fit: cover;
+    margin-top: 16px;
+    /* rotate: 180deg; */
+    animation: bottomArrow 0.5s forwards;
+    img{
+      background-color: transparent;
+    }
+  }
+  .chatWrap{
+    width: 365px;
+    height: 550px;
+    position: absolute;
+    bottom: 0;
+    overflow-y: auto;
+    /* border: solid 1px tomato; */
+  }
+}
+
+.chatContainer.active{
+  animation: topSlide 1s forwards;
+  button{
+    animation: topArrow 0.5s forwards;
+  }
+}
+
+@keyframes topSlide {
+  0%{
+    bottom: -256px;
+  }
+  100%{
+    bottom: 0;
+  }
+}
+
+@keyframes topArrow {
+  0%{
+    rotate: 180deg;
+  }
+  100%{
+    rotate: 0;
+  }
+}
+
+@keyframes bottomSlide {
+  0%{
+    bottom: 0;
+  }
+  100%{
+    bottom: -256px;
+  }
+}
+
+@keyframes bottomArrow {
+  0%{
+    rotate: 0;
+  }
+  100%{
+    rotate: 180deg;
+  }
+}

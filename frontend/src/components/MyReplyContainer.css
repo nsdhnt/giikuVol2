@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+
+html{
+  font-size: 62.5%;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  /* background-color: #747474; */
+}
+
+.MRCwhole{
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  .MRCcontainer{
+    padding: 6px 9px 6px 24px;
+    border-radius: 16px;
+    background-color: white;
+    box-shadow: 0 2px 8.7px rgba(0,0,0,0.25);
+    width: auto;
+    max-width: 70%;
+    .MRCwrap{
+      display: flex;
+      background-color: transparent;
+      img{
+        width: 27px;
+        height: 27px;
+        object-fit: cover;
+        background-color: transparent;
+        margin-top: 0;
+      }
+      p{
+        align-self: flex-start;
+        padding-right: 24px;
+        letter-spacing: 0.05em;
+        font-weight: bold;
+        font-size: 1.6rem;
+        font-family: "Note SansJP", sans-serif;
+        background-color: transparent;
+      }
+    }
+  }
+  
+  .MRCtime{
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    align-self: flex-end;
+    background-color: transparent;
+    padding: 0 2px;
+  }
+}
