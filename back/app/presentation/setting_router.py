@@ -4,6 +4,7 @@ from app.application.setting_servise import UpdateSettingsUseCase
 from app.application.setting_servise import GetSettingsUseCase
 from app.infrastructure.setting_repository_impl import SettingsRepositoryImpl
 from app.infrastructure.db import get_db
+from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
 class SettingsRequest(BaseModel):
@@ -14,7 +15,7 @@ class SettingsRequest(BaseModel):
 router = APIRouter()
 
 @router.post("/settings")
-def update_settings(req: SettingsRequest, db=Depends(get_db)):
+def update_settings(req: SettingsRequest, db: Session=Depends(get_db)):
     repo = SettingsRepositoryImpl(db)
     usecase = UpdateSettingsUseCase(repo)
 
@@ -32,7 +33,7 @@ def update_settings(req: SettingsRequest, db=Depends(get_db)):
     }
 
 @router.get("/settings/{user_id}")
-def get_settings(user_id: str, db=Depends(get_db)):
+def get_settings(user_id: str, db: Session=Depends(get_db)):
     repo = SettingsRepositoryImpl(db)
     usecase = GetSettingsUseCase(repo)
 
