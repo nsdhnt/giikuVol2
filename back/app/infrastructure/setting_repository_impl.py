@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from app.infrastructure.setting_repository import SettingsRepository
 from app.domain.settings import Settings
 
@@ -7,40 +8,43 @@ class SettingsRepositoryImpl(SettingsRepository):
         self.db = db
 
     def find_by_user_id(self, user_id: str) -> Settings | None:
-        with self.db.cursor() as cur:
-            cur.execute(
-                "SELECT user_id, topic, time, created_at FROM settings WHERE user_id = %s",
-                (user_id,)
-            )
-            row = cur.fetchone()
+        result = self.db.execute(
+            text("""
+                SELECT user_id, topic, time, created_at
+                FROM settings
+                WHERE user_id = :user_id
+            """),
+            {"user_id": user_id}
+        ).fetchone()
 
-            if not row:
-                return None
+        if not result:
+            return None
 
-            return Settings(
-                user_id=row[0],
-                topic=row[1],
-                time=row[2],
-                created_at=row[3],
-            )
+        return Settings(
+            user_id=result.user_id,
+            topic=result.topic,
+            time=result.time,
+            created_at=result.created_at,
+        )
 
     def save(self, settings: Settings) -> Settings:
-        with self.db.cursor() as cur:
-            cur.execute(
-                """
+        self.db.execute(
+            text("""
                 INSERT INTO settings (user_id, topic, time, created_at)
-                VALUES (%s, %s, %s, %s)
+                VALUES (:user_id, :topic, :time, :created_at)
                 ON CONFLICT (user_id)
                 DO UPDATE SET
                     topic = EXCLUDED.topic,
                     time = EXCLUDED.time
-                """,
-                (
-                    settings.user_id,
-                    settings.topic,
-                    settings.time,
-                    settings.created_at,
-                ),
-            )
+            """),
+            {
+                "user_id": settings.user_id,
+                "topic": settings.topic,
+                "time": settings.time,
+                "created_at": settings.created_at,
+            }
+        )
+
+        self.db.commit()
 
         return settings
