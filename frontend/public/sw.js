@@ -1,9 +1,9 @@
-const CACHE_NAME = 'giiku-v3';
+const CACHE_NAME = 'giiku-v7';
 const APP_SHELL = [
   '/',
   '/index.html',
   '/manifest.webmanifest',
-  '/favicon.svg',
+  '/riputan_logo.png',
   '/icons.svg',
 ];
 
@@ -27,8 +27,9 @@ async function postAnswer(answerUrl, answer) {
   return response.json();
 }
 
-function wait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+async function notifyClients(message) {
+  const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+  clients.forEach((client) => client.postMessage(message));
 }
 
 self.addEventListener('install', (event) => {
@@ -73,6 +74,16 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(request).then((cached) => {
+      if (request.destination === 'script' || request.destination === 'style') {
+        return fetch(request)
+          .then((response) => {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+            return response;
+          })
+          .catch(() => cached);
+      }
+
       if (cached) return cached;
 
       return fetch(request).then((response) => {
@@ -97,12 +108,19 @@ self.addEventListener('notificationclick', (event) => {
 
     event.waitUntil(
       postAnswer(data.answerUrl, replyText)
-        .then((result) => wait(30000).then(() => result))
+        .then((result) => {
+          notifyClients({
+            type: 'ISSUE_UPDATED',
+            issueId: data.issueId,
+            issue: result,
+          });
+          return result;
+        })
         .then((result) =>
           self.registration.showNotification('判定結果', {
             body: result?.judgment || '判定結果を取得できませんでした',
-            icon: '/favicon.svg',
-            badge: '/favicon.svg',
+            icon: '/riputan_logo.png',
+            badge: '/riputan_logo.png',
             data: {
               issueId: data.issueId,
               judgment: result?.judgment,
