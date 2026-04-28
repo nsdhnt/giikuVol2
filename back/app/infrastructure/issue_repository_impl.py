@@ -8,6 +8,7 @@ class IssueRepositoryImpl(IssueRepository):
     def __init__(self, db):
         self.db = db
         self._create_table_if_not_exists()
+        self._ensure_text_columns()
 
     def _create_table_if_not_exists(self) -> None:
         # Supabase PostgreSQL上にissuesテーブルがない場合だけ作成します。
@@ -25,6 +26,21 @@ class IssueRepositoryImpl(IssueRepository):
                 """
             )
         )
+        self.db.commit()
+
+    def _ensure_text_columns(self) -> None:
+        # Existing Supabase tables may have older boolean columns.
+        # The current API stores the user's text answer and text judgment.
+        for column in ("answer", "judgment"):
+            self.db.execute(
+                text(
+                    f"""
+                    ALTER TABLE issues
+                    ALTER COLUMN {column} TYPE TEXT
+                    USING {column}::TEXT
+                    """
+                )
+            )
         self.db.commit()
 
     def create(self, issue: Issues) -> Issues:
