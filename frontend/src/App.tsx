@@ -1,26 +1,16 @@
-// import Top from "./pages/top";
-// import MinutesSlider from './components/MinutesSlider';
-// import NotificationCollapsed from './components/NotificationCollapsed';
-// import ReplyNoticeButton from "./components/ReplyNoticeButton";
-// import MyReplyContainer from "./components/MyReplyContainer";
-// import ChatArea from "./components/ChatArea";
-import Login from "./pages/Login";
-// import Description from "./pages/Description";
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Login from './pages/login'
+import Description from './pages/Description'
 
 function App() {
-  return(
-    <>
-      {/* <h1>テスト</h1> */}
-      {/* <Top /> */}
-      {/* <MinutesSlider/> */}
-      {/* <NotificationCollapsed /> */}
-      {/* <ReplyNoticeButton /> */}
-      {/* <MyReplyContainer /> */}
-      {/* <ChatArea /> */}
-      <Login />
-      {/* <Description /> */}
-    </>
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/Description" element={<Description />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
-export default App;
+export default App
