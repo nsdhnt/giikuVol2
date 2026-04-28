@@ -17,10 +17,14 @@ export type Issue = {
 };
 
 type Settings = {
-  user_id: string;
+  user_id?: string;
   topic: string;
   time: number;
-  created_at: string;
+  created_at?: string;
+};
+
+type NotFoundResponse = {
+  message: string;
 };
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -58,6 +62,10 @@ export function saveSettings(userId: string, topic: string, time: number): Promi
       time,
     }),
   });
+}
+
+export function getSettings(userId: string): Promise<Settings | NotFoundResponse> {
+  return request<Settings | NotFoundResponse>(`/settings/${userId}`);
 }
 
 export function startIssue(userId: string): Promise<Issue> {

@@ -18,6 +18,10 @@ const MinutesSlider: React.FC<MinutesSliderProps> = ({
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
   const radius = 45;
   const circumference = 2 * Math.PI * radius;
 
