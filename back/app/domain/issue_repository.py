@@ -13,6 +13,10 @@ class IssueRepository(ABC):
         pass
 
     @abstractmethod
+    def find_latest_by_user_id(self, user_id: str) -> Issues | None:
+        pass
+
+    @abstractmethod
     def update_answer(self, id: str, answer: str) -> None:
         pass
 

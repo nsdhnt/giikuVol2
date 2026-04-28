@@ -19,12 +19,19 @@ class GeminiClient:
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY is not set")
 
-    def generate_issue(self) -> str:
-        prompt = "英単語クイズを1問だけ出してください。問題文だけ返してください。"
+    def generate_issue(self, topic: str) -> str:
+        prompt = f"""次のお題に沿った英単語クイズを1問だけ作ってください。
+お題: {topic}
+
+条件:
+- 回答は英単語1語になる問題にする
+- 答えは書かない
+- 問題文だけを日本語で返す
+"""
         return self._generate_text(prompt)
 
     def judge_answer(self, issue: str, answer: str) -> str:
-        prompt = f"""次の問題と回答を見て、正解なら⭕️、不正解なら❌だけ返してください。
+        prompt = f"""次の問題と回答を見て、正解なら「正解」、不正解なら「不正解」だけを返してください。
 
 問題:
 {issue}
@@ -34,10 +41,9 @@ class GeminiClient:
 """
         text = self._generate_text(prompt)
 
-        # Gemini の返答に余計な文字が混ざっても、DBには必ず指定の2値だけ保存します。
-        if "⭕️" in text or "⭕" in text:
-            return "⭕️"
-        return "❌"
+        if "正解" in text and "不正解" not in text:
+            return "正解"
+        return "不正解"
 
     def _generate_text(self, prompt: str) -> str:
         url = (

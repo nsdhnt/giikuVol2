@@ -71,6 +71,32 @@ class IssueRepositoryImpl(IssueRepository):
             created_at=result.created_at,
         )
 
+    def find_latest_by_user_id(self, user_id: str) -> Issues | None:
+        result = self.db.execute(
+            text(
+                """
+                SELECT id, user_id, issue, answer, judgment, created_at
+                FROM issues
+                WHERE user_id = :user_id
+                ORDER BY created_at DESC
+                LIMIT 1
+                """
+            ),
+            {"user_id": user_id},
+        ).fetchone()
+
+        if not result:
+            return None
+
+        return Issues(
+            id=str(result.id),
+            user_id=result.user_id,
+            issue=result.issue,
+            answer=result.answer or "",
+            judgment=result.judgment or "",
+            created_at=result.created_at,
+        )
+
     def update_answer(self, id: str, answer: str) -> None:
         self.db.execute(
             text(

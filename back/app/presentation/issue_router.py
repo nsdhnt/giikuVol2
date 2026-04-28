@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.application.issue_service import IssueService
 from app.infrastructure.db import get_db
 from app.infrastructure.issue_repository_impl import IssueRepositoryImpl
+from app.infrastructure.setting_repository_impl import SettingsRepositoryImpl
 
 
 router = APIRouter()
@@ -32,8 +33,12 @@ def to_response(issue):
 @router.post("/issues/start")
 def start_issue(req: StartIssueRequest, db: Session = Depends(get_db)):
     repo = IssueRepositoryImpl(db)
-    service = IssueService(repo)
-    issue = service.start_issue(req.user_id)
+    settings_repo = SettingsRepositoryImpl(db)
+    service = IssueService(repo, settings_repo)
+    try:
+        issue = service.start_issue(req.user_id)
+    except ValueError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
     return to_response(issue)
 
 
