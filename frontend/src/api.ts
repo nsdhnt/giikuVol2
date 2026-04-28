@@ -89,3 +89,7 @@ export function submitIssueAnswer(issueId: string, answer: string): Promise<Issu
 export function getIssueAnswerUrl(issueId: string): string {
   return `${API_BASE_URL}/issues/${issueId}/answer`;
 }
+
+export function getIssuesByUserId(userId: string): Promise<Issue[]> {
+  return request<Issue[]>(`/issues/user/${userId}`);
+}

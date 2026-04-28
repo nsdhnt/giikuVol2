@@ -1,14 +1,19 @@
 import './MyReplyContainer.css';
 import replyIcon from '../assets/replyIcon.svg';
 
-function MyReplyContainer() {
+type MyReplyContainerProps = {
+  message: string;
+  time?: string;
+};
+
+function MyReplyContainer({ message, time }: MyReplyContainerProps) {
   return(
     <>
       <div className='MRCwhole'>
-        <p className="MRCtime">9:41</p>
+        {time && <p className="MRCtime">{time}</p>}
         <div className="MRCcontainer">
           <div className="MRCwrap">
-            <p>apple</p>
+            <p>{message}</p>
             <img src={replyIcon} alt="" />
           </div>
         </div>

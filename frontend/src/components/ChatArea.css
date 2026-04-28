@@ -77,6 +77,18 @@ body{
   }
 }
 
+.issueMessageGroup {
+  background-color: transparent;
+}
+
+.chatError {
+  color: #ffeded;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 8px 0;
+  text-align: center;
+}
+
 .chatContainer.active{
   animation: topSlide 1s forwards;
   button{
