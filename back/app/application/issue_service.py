@@ -51,3 +51,6 @@ class IssueService:
         self.repo.update_judgment(id, judgment)
 
         return self.repo.find_by_id(id)
+
+    def get_issues_by_user_id(self, user_id: str) -> list[Issues]:
+        return self.repo.find_all_by_user_id(user_id)

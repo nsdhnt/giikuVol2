@@ -57,3 +57,12 @@ def submit_answer(id: str, req: AnswerIssueRequest, db: Session = Depends(get_db
         raise HTTPException(status_code=404, detail="issue not found")
 
     return to_response(issue)
+
+
+@router.get("/issues/user/{user_id}")
+def get_issues_by_user_id(user_id: str, db: Session = Depends(get_db)):
+    repo = IssueRepositoryImpl(db)
+    service = IssueService(repo)
+    issues = service.get_issues_by_user_id(user_id)
+
+    return [to_response(issue) for issue in issues]

@@ -113,6 +113,31 @@ class IssueRepositoryImpl(IssueRepository):
             created_at=result.created_at,
         )
 
+    def find_all_by_user_id(self, user_id: str) -> list[Issues]:
+        results = self.db.execute(
+            text(
+                """
+                SELECT id, user_id, issue, answer, judgment, created_at
+                FROM issues
+                WHERE user_id = :user_id
+                ORDER BY created_at DESC
+                """
+            ),
+            {"user_id": user_id},
+        ).fetchall()
+
+        return [
+            Issues(
+                id=str(result.id),
+                user_id=result.user_id,
+                issue=result.issue,
+                answer=result.answer or "",
+                judgment=result.judgment or "",
+                created_at=result.created_at,
+            )
+            for result in results
+        ]
+
     def update_answer(self, id: str, answer: str) -> None:
         self.db.execute(
             text(
