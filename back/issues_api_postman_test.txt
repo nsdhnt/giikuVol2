@@ -1,0 +1,120 @@
+Issues API 手動テスト用メモ
+===========================
+
+前提
+----
+- FastAPI を起動しておく
+- .env に DATABASE_URL と GEMINI_API_KEY を設定しておく
+- ベースURL例: http://localhost:8000
+
+起動例
+------
+cd back
+uvicorn app.main:app --reload
+
+
+1. 問題生成API
+--------------
+Method:
+POST
+
+URL:
+http://localhost:8000/issues/start
+
+Headers:
+Content-Type: application/json
+
+Body:
+{
+  "user_id": "user001"
+}
+
+期待レスポンス例:
+{
+  "id": "生成されたUUID",
+  "user_id": "user001",
+  "issue": "apple の意味は？",
+  "answer": "",
+  "judgment": "",
+  "created_at": "2026-04-28T12:34:56.789000"
+}
+
+メモ:
+- 返ってきた id を、次の回答APIの URL に使う
+- issue は Gemini API が生成するので毎回変わる
+
+
+2. 回答API
+----------
+Method:
+POST
+
+URL:
+http://localhost:8000/issues/{id}/answer
+
+例:
+http://localhost:8000/issues/ここに生成APIで返ったidを入れる/answer
+
+Headers:
+Content-Type: application/json
+
+Body:
+{
+  "answer": "りんご"
+}
+
+期待レスポンス例:
+{
+  "id": "生成APIで返ったUUID",
+  "user_id": "user001",
+  "issue": "apple の意味は？",
+  "answer": "りんご",
+  "judgment": "⭕️",
+  "created_at": "2026-04-28T12:34:56.789000"
+}
+
+メモ:
+- judgment は必ず "⭕️" または "❌"
+- Gemini API が issue と answer を見て判定する
+
+
+エラーテスト
+------------
+
+回答が空の場合:
+POST http://localhost:8000/issues/{id}/answer
+
+Body:
+{
+  "answer": ""
+}
+
+期待レスポンス:
+HTTP 400
+{
+  "detail": "answer is required"
+}
+
+
+存在しない id の場合:
+POST http://localhost:8000/issues/00000000-0000-0000-0000-000000000000/answer
+
+Body:
+{
+  "answer": "りんご"
+}
+
+期待レスポンス:
+HTTP 404
+{
+  "detail": "issue not found"
+}
+
+
+Postman での流れ
+----------------
+1. POST /issues/start を送る
+2. レスポンスの id をコピーする
+3. POST /issues/{id}/answer の {id} に貼り付ける
+4. answer を入力して送る
+5. judgment が "⭕️" または "❌" で返ることを確認する
