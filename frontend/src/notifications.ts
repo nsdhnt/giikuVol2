@@ -27,14 +27,14 @@ export async function showIssueNotification(issue: Issue) {
       action: 'reply',
       title: '回答する',
       type: 'text',
-      placeholder: '英単語で入力',
+      placeholder: '解説を入力',
     },
   ];
 
   const options: ActionNotificationOptions = {
     body: issue.issue,
-    icon: '/favicon.svg',
-    badge: '/favicon.svg',
+    icon: '/logo.png',
+    badge: '/logo.png',
     data: {
       issueId: issue.id,
       answerUrl: getIssueAnswerUrl(issue.id),
@@ -42,5 +42,5 @@ export async function showIssueNotification(issue: Issue) {
     actions,
   };
 
-  await registration.showNotification('単語クイズ', options);
+  await registration.showNotification('リプ単', options);
 }
