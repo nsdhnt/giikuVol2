@@ -9,6 +9,10 @@ def login(db: Session, email: str, password: str):
     if not user or user.password != password:
         return {"error": "invalid"}
     return {"message": "ok"}
+from sqlalchemy.orm import Session
 
-def update_subscribe(db: Session, user_id: int, subscribe: str):
-    return update_user_subscribe(db, user_id, subscribe)
+def update_subscribe(db: Session, user_id: str, subscribe: str):
+    user = update_user_subscribe(db, user_id, subscribe)
+    if not user:
+        return {"error": "user not found"}
+    return {"message": "ok", "subscribe": user.subscribe}
