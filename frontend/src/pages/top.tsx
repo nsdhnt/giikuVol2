@@ -5,9 +5,9 @@ import additionBtn from '../assets/addition_btn.png';
 import MinutesSlider from '../components/MinutesSlider';
 import rocket from '../assets/rocket.png';
 import smoke from '../assets/smoke.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatArea from '../components/ChatArea';
-import { saveSettings, startIssue } from '../api';
+import { getSettings, saveSettings, startIssue } from '../api';
 import { showIssueNotification } from '../notifications';
 
 function Top() {
@@ -17,6 +17,21 @@ function Top() {
   const [minutes, setMinutes] = useState(10);
   const [apiError, setApiError] = useState("");
   const [isStarting, setIsStarting] = useState(false);
+
+  useEffect(() => {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) return;
+
+    getSettings(userId)
+      .then((settings) => {
+        if ("message" in settings) return;
+        setSelectedTopic(settings.topic);
+        setMinutes(settings.time);
+      })
+      .catch((error) => {
+        setApiError(error instanceof Error ? error.message : "設定の取得に失敗しました");
+      });
+  }, []);
 
   const handleClick = async () => {
     const userId = localStorage.getItem("user_id");
@@ -81,7 +96,7 @@ function Top() {
                 </div>
               </div>
               <div className="timer_content">
-                <MinutesSlider min={1} max={60} initialValue={10} onChange={setMinutes} />
+                <MinutesSlider min={1} max={60} initialValue={minutes} onChange={setMinutes} />
               </div>
               {apiError && <p className="topError">{apiError}</p>}
               <div className="start_btn">
