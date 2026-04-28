@@ -7,15 +7,37 @@ import rocket from '../assets/rocket.png';
 import smoke from '../assets/smoke.png';
 import { useState } from 'react';
 import ChatArea from '../components/ChatArea';
-// import topBackground from '../assets/top_background.png';
-// import topBlack from '../assets/top_black.png';
+import { saveSettings, startIssue } from '../api';
 
 function Top() {
   const [mode, setMode] = useState("selection");
   const [count, setCount] = useState(3);
+  const [selectedTopic, setSelectedTopic] = useState("英単語");
+  const [minutes, setMinutes] = useState(10);
+  const [apiError, setApiError] = useState("");
+  const [isStarting, setIsStarting] = useState(false);
 
-  const handleClick = () => {
-    // setMode("launchLocket");
+  const handleClick = async () => {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) {
+      setApiError("ユーザー情報がありません。もう一度登録してください。");
+      return;
+    }
+
+    setIsStarting(true);
+    setApiError("");
+
+    try {
+      await saveSettings(userId, selectedTopic, minutes);
+      const firstIssue = await startIssue(userId);
+      localStorage.setItem("current_issue_id", firstIssue.id);
+      localStorage.setItem("current_issue", firstIssue.issue);
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "問題の取得に失敗しました");
+      setIsStarting(false);
+      return;
+    }
+
     setMode("countdown");
     const timer = setInterval(() => {
       setCount((prev) => {
@@ -33,10 +55,8 @@ function Top() {
         return prev - 1;
       });
     }, 1000);
+    setIsStarting(false);
   }
-  // if(count === 0){
-  //   setMode("launchLocket");
-  // }
 
   return (
     <>
@@ -46,12 +66,12 @@ function Top() {
             <h1>学習内容</h1>
             <div className="content">
               <div className="learn_content">
-                <div className="planet1">
-                  <button><img src={planet1} alt="" /></button>
+                <div className={selectedTopic === "HTML" ? "planet1 selectedTopic" : "planet1"}>
+                  <button onClick={() => setSelectedTopic("HTML")}><img src={planet1} alt="" /></button>
                   <p>HTML</p>
                 </div>
-                <div className="planet2">
-                  <button><img src={planet2} alt="" /></button>
+                <div className={selectedTopic === "英単語" ? "planet2 selectedTopic" : "planet2"}>
+                  <button onClick={() => setSelectedTopic("英単語")}><img src={planet2} alt="" /></button>
                   <p>英単語</p>
                 </div>
                 <div className="addition_btn">
@@ -59,10 +79,13 @@ function Top() {
                 </div>
               </div>
               <div className="timer_content">
-                <MinutesSlider />
+                <MinutesSlider min={1} max={60} initialValue={10} onChange={setMinutes} />
               </div>
+              {apiError && <p className="topError">{apiError}</p>}
               <div className="start_btn">
-                <button onClick={() => handleClick()}>スタート</button>
+                <button onClick={() => handleClick()} disabled={isStarting}>
+                  {isStarting ? "..." : "スタート"}
+                </button>
               </div>
             </div>
           </div>

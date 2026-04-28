@@ -1,42 +1,55 @@
 import { useState } from 'react';
+import type { ChangeEvent, MouseEvent } from 'react';
 import './Login.css';
 import logo from '../assets/logo.svg';
 import stepLoad from '../assets/stepLoad.svg';
-import Description from './Description';
 import { useNavigate } from 'react-router-dom';
+import { signup } from '../api';
+
+type FormValues = {
+  userName: string;
+  mailAddress: string;
+  password: string;
+};
+
+type FormErrors = Partial<Pick<FormValues, 'mailAddress' | 'password'>>;
 
 function Login() {
   const navigate = useNavigate()
   const initialValues = { userName: "", mailAddress: "", password: "" };
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  // eslint-disable-next-line no-unused-vars
-  // const [isSubmit, setIsSubmit] = useState(false);
-  const [loginMode, setLoginMode] = useState(false);
+  const [formValues, setFormValues] = useState<FormValues>(initialValues);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [apiError, setApiError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // リロード防止
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const errors = validate(formValues);
     setFormErrors(errors);
-    // setIsSubmit(true);
+    setApiError("");
 
-    // エラーがなければ送信処理へ
-    if (Object.keys(errors).length === 0) {
-      e.preventDefault();
-      setLoginMode(true);
-      console.log("送信成功！", formValues);
+    if (Object.keys(errors).length !== 0) return;
+
+    setIsSubmitting(true);
+    try {
+      const user = await signup(formValues.mailAddress, formValues.password);
+      localStorage.setItem("user_id", user.id);
+      localStorage.setItem("user_email", user.email);
       navigate("/Description");
-
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : "登録に失敗しました");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const validate = (values) => {
-    const errors = {};
+  const validate = (values: FormValues) => {
+    const errors: FormErrors = {};
     const regex = /^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/;
     
     if (!values.mailAddress) {
@@ -47,8 +60,8 @@ function Login() {
     
     if (!values.password) {
       errors.password = "パスワードを入力してください";
-    } else if (values.password.length < 8) { // 8文字以上推奨
-      errors.password = "8文字以上15文字以下で入力してください";
+    } else if (values.password.length < 8) {
+      errors.password = "8文字以上で入力してください";
     } else if (values.password.length > 15) {
       errors.password = "15文字以下で入力してください";
     }
@@ -57,58 +70,54 @@ function Login() {
 
   return (
     <>
-      { loginMode === false && (
-        <div className='login_page'>
-          <h1><img src={logo} alt="ロゴ" /></h1>
-          <div className="formContainer">
-            <img src={stepLoad} alt="ステップ" />
-            {/* onSubmit を追加 */}
-            <div>
-              <div className="uiForm">
-                <div className="formField">
-                  <label>メールアドレス</label>
-                  <input
-                    type="text"
-                    placeholder='sample@missionmall.com'
-                    name='mailAddress'
-                    value={formValues.mailAddress}
-                    onChange={handleChange}
-                  />
-                </div>
-                {/* 波括弧を1つに修正 */}
-                <p className="errorMsg" style={{ color: "red" }}>{formErrors.mailAddress}</p>
-
-                <div className="formField">
-                  <label>パスワード</label>
-                  <input
-                    type="password" /* password型に変更 */
-                    placeholder='パスワード(英数字を含めた８文字以上)'
-                    name='password'
-                    value={formValues.password}
-                    onChange={handleChange}
-                  />
-                </div>
-                <p className="errorMsg" style={{ color: "red" }}>{formErrors.password}</p>
-
-                <div className="consensus">
-                  <input type="checkbox" id="agree" required />
-                  <label htmlFor="agree">
-                    <span>利用規約</span>と<span>プライバシーポリシー</span>に同意する
-                  </label>
-                </div>
-
-                <div className="entry_btn">
-                  <button type="button" onClick={handleSubmit}>登録</button>
-                </div>
-                <p className='loginLink'>ログインの方はこちら</p>
+      <div className='login_page'>
+        <h1><img src={logo} alt="繝ｭ繧ｴ" /></h1>
+        <div className="formContainer">
+          <img src={stepLoad} alt="繧ｹ繝・ャ繝・" />
+          <div>
+            <div className="uiForm">
+              <div className="formField">
+                <label>メールアドレス</label>
+                <input
+                  type="text"
+                  placeholder='sample@missionmall.com'
+                  name='mailAddress'
+                  value={formValues.mailAddress}
+                  onChange={handleChange}
+                />
               </div>
+              <p className="errorMsg" style={{ color: "red" }}>{formErrors.mailAddress}</p>
+
+              <div className="formField">
+                <label>パスワード</label>
+                <input
+                  type="password"
+                  placeholder='8文字以上15文字以下'
+                  name='password'
+                  value={formValues.password}
+                  onChange={handleChange}
+                />
+              </div>
+              <p className="errorMsg" style={{ color: "red" }}>{formErrors.password}</p>
+              {apiError && <p className="errorMsg" style={{ color: "red" }}>{apiError}</p>}
+
+              <div className="consensus">
+                <input type="checkbox" id="agree" required />
+                <label htmlFor="agree">
+                  <span>利用規約</span>と<span>プライバシーポリシー</span>に同意する
+                </label>
+              </div>
+
+              <div className="entry_btn">
+                <button type="button" onClick={handleSubmit} disabled={isSubmitting}>
+                  {isSubmitting ? "..." : "登録"}
+                </button>
+              </div>
+              <p className='loginLink'>ログインの方はこちら</p>
             </div>
           </div>
         </div>
-      )}
-      { loginMode === true && (
-        <Link to ="/Description" />
-      )}
+      </div>
     </>
   );
 }
