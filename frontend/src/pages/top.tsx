@@ -8,6 +8,7 @@ import smoke from '../assets/smoke.png';
 import { useState } from 'react';
 import ChatArea from '../components/ChatArea';
 import { saveSettings, startIssue } from '../api';
+import { showIssueNotification } from '../notifications';
 
 function Top() {
   const [mode, setMode] = useState("selection");
@@ -32,6 +33,7 @@ function Top() {
       const firstIssue = await startIssue(userId);
       localStorage.setItem("current_issue_id", firstIssue.id);
       localStorage.setItem("current_issue", firstIssue.issue);
+      await showIssueNotification(firstIssue);
     } catch (error) {
       setApiError(error instanceof Error ? error.message : "問題の取得に失敗しました");
       setIsStarting(false);
