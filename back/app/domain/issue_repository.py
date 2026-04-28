@@ -17,6 +17,10 @@ class IssueRepository(ABC):
         pass
 
     @abstractmethod
+    def find_all_by_user_id(self, user_id: str) -> list[Issues]:
+        pass
+
+    @abstractmethod
     def update_answer(self, id: str, answer: str) -> None:
         pass
 
